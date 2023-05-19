@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>HTML jumper</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A simple jumper game made with HTML"/>
+    <meta name="keywords" content="indie game,html,javascript,simple,jumper"/>
+
+    <style>
+        html {
+            display: block;
+            height: 100%;
+            font-family: Roboto, sans-serif;
+            box-sizing: border-box;
+        }
+        body{
+            background: #15151a;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        *, *:before, *:after {
+            box-sizing: inherit;
+        }
+        #game{
+            display: inline-block;
+        }
+        canvas{
+            background: white;
+            border: 2px solid #c6c6c6;
+
+        }
+        .upper {
+            display: flex;
+            padding: 10px 0;
+            color: white;
+        }
+        .upper div {
+            margin-right: 24px;
+        }
+
+    </style>
+</head>
+<body>
+<div id="game">
+    <div class="upper">
+        <div>Score: <span id="score">0</span></div>
+        <div>Record: <span id="record">0</span></div>
+    </div>
+    <canvas id="manager"></canvas>
+ </div>
+
+
+<script src="./game.js"></script>
+
+</body>
+</html>
