@@ -3,8 +3,9 @@ import {setRecord, setScore} from "../tools/score";
 import {Spark} from "./spark";
 import {Player} from "./player";
 import {PLAYER_SIZE} from "../config/size.config";
-import {DIFFICULTIES} from "./difficulty";
 import {CanvasManager} from "./canvas-manager";
+import {DIFFICULTIES} from "../config/difficulties.config";
+import {fetchRecord, storeRecord} from "../tools/storage";
 
 
 export class Game {
@@ -17,7 +18,7 @@ export class Game {
     sparks: Spark[] = [];
     sparkIndex = 0;
     sparksMax = 20;
-    record = parseInt(localStorage.getItem('record')) || 0;
+    record = fetchRecord();
     touchActive = false;
     player = new Player({x: PLAYER_SIZE.x, y: PLAYER_SIZE.y, width: PLAYER_SIZE.width, height: PLAYER_SIZE.height});
     platformGroup = new PlatformGroup(this.canvas.width, this.canvas.height);
@@ -103,8 +104,8 @@ export class Game {
         })
         if (this.score > this.record) {
             this.record = this.score;
-            setRecord(this.record)
-            localStorage.setItem("record", this.record + "");
+            setRecord(this.record);
+            storeRecord(this.record);
         }
     }
 

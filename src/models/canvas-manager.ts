@@ -1,3 +1,4 @@
+import {JUMP_KEYS} from "../config/keys.config";
 
 
 export class CanvasManager {
@@ -32,6 +33,8 @@ export class CanvasManager {
         this.canvas.addEventListener("touchend", ()=>{
             this.touching = false;
         });
+        const isKeyWanted = (event) => JUMP_KEYS.indexOf(event.keyCode) > -1;
+
         window.addEventListener("keydown", e=>{
             if(isKeyWanted(e))
                 this.key = true;
@@ -71,12 +74,4 @@ export class CanvasManager {
         window.requestAnimationFrame(counter);
     }
 
-
-
-}
-
-const keyMap = [32, 38];
-
-function isKeyWanted(event){
-    return keyMap.indexOf(event.keyCode) > -1
 }
