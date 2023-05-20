@@ -3,7 +3,6 @@ import {Rect} from "./rect";
 import {BLAZE_SIZE} from "../config/size.config";
 import {Player} from "./player";
 import {hexToRgba} from "../tools/color";
-import {PLAYER_COLOR} from "../config/colors.config";
 
 
 

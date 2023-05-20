@@ -1,11 +1,22 @@
 
 
-export function hexToRgba(hex, alpha) {
-    if (alpha === void 0) { alpha = 1; }
-    let c = hex.substring(1).split('');
-    if (c.length == 3) {
-        c = [c[0], c[0], c[1], c[1], c[2], c[2]];
+export function hexToRgba(hex: string, alpha: number = 1): string {
+    const sanitizedHex = hex.replace('#', '');
+    let rgba = '';
+
+    if (sanitizedHex.length === 3) {
+        rgba = sanitizedHex
+            .split('')
+            .map((char) => `${char}${char}`)
+            .join('');
+    } else {
+        rgba = sanitizedHex;
     }
-    c = '0x' + c.join('');
-    return 'rgba(' + [(c >> 16) & 255, (c >> 8) & 255, c & 255].join(',') + ',' + alpha + ')';
+
+    const parsedHex = parseInt(rgba, 16);
+    const red = (parsedHex >> 16) & 255;
+    const green = (parsedHex >> 8) & 255;
+    const blue = parsedHex & 255;
+
+    return `rgba(${red},${green},${blue},${alpha})`;
 }

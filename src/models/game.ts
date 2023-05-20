@@ -6,17 +6,16 @@ import {PLAYER_SIZE} from "../config/size.config";
 import {CanvasManager} from "./canvas-manager";
 import {DIFFICULTIES} from "../config/difficulties.config";
 import {fetchRecord, storeRecord} from "../tools/storage";
+import {Rect} from "./rect";
 
 
 export class Game {
-
-    canvas = new CanvasManager(document.getElementById('manager'), {width: 640, height: 400})
-
-    score = 0;
-    acceleration = 0;
-    accelerationModifier = 0;
+    canvas: CanvasManager = new CanvasManager(document.getElementById('manager'), {width: 640, height: 400})
+    score: number = 0;
+    acceleration: number = 0;
+    accelerationModifier:number = 0;
     sparks: Spark[] = [];
-    sparkIndex = 0;
+    sparkIndex:number = 0;
     sparksMax = 20;
     record = fetchRecord();
     touchActive = false;
@@ -27,69 +26,77 @@ export class Game {
         setRecord(this.record);
 
         this.canvas.onUpdate = () => {
-            this.player.update();
-            if (this.player.y > this.canvas.height || this.player.x + this.player.width < 0)
-                this.resetGame()
-
-            if (this.isTapped() && this.player.velocityY < -8)
-                this.player.velocityY -= 0.75;
-
-            this.acceleration += (this.accelerationModifier - this.acceleration) * 0.01;
-
-            this.platformGroup.platforms.forEach( platform => {
-                if (this.player.intersects(platform)) {
-                    let collidedPlatform = platform;
-                    if (this.player.y < platform.y) {
-                        this.player.y = platform.y;
-                        this.player.velocityY = 0;
-                    }
-
-                    this.player.rollback();
-
-                    this.sparks[(this.sparkIndex++) % this.sparksMax] =
-                        Spark.createFriction(this.player, collidedPlatform.color, this.acceleration);
-
-
-                    if (this.player.intersectsLeft(platform)) {
-                        this.player.x = collidedPlatform.x - this.player.width * 2;
-                        for (let i = 0; i < 10; i++) {
-                            this.sparks[(this.sparkIndex++) % this.sparksMax] =
-                                Spark.createCollision(this.player, collidedPlatform.color, this.acceleration);
-                        }
-
-                        this.player.velocityY = this.player.velocityY / 2;
-                        this.player.velocityX = -20 + -(this.acceleration * 4);
-                    } else if (this.isTapped()) {
-                        this.jumped()
-                    }
-
-                }
-            })
-
-            this.platformGroup.update(this.canvas, this.acceleration)
-
-            this.sparks.forEach(spark => {
-                spark.update();
-            })
-
+            this.updateGame()
         };
 
         this.canvas.onDraw = () => {
-            this.drawShape(this.player);
-            this.platformGroup.platforms.forEach(platform => {
-                this.drawShape(platform)
-            });
-            this.sparks.forEach(spark => {
-                this.drawShape(spark)
-            })
+            this.drawGame();
         };
 
         this.canvas.start();
     }
 
-    private drawShape(s) {
-        this.canvas.context.fillStyle = s.color;
-        this.canvas.context.fillRect(s.x, s.y, s.width, s.height)
+    private updateGame(){
+        this.player.update();
+        if (this.player.y > this.canvas.height || this.player.x + this.player.width < 0)
+            this.resetGame()
+
+        if (this.isTapped() && this.player.velocityY < -8)
+            this.player.velocityY -= 0.75;
+
+        this.acceleration += (this.accelerationModifier - this.acceleration) * 0.01;
+
+        this.platformGroup.platforms.forEach( platform => {
+            if (this.player.intersects(platform)) {
+                let collidedPlatform = platform;
+                if (this.player.y < platform.y) {
+                    this.player.y = platform.y;
+                    this.player.velocityY = 0;
+                }
+
+                this.player.rollback();
+
+                this.sparks[(this.sparkIndex++) % this.sparksMax] =
+                    Spark.createFriction(this.player, collidedPlatform.color, this.acceleration);
+
+
+                if (this.player.intersectsLeft(platform)) {
+                    this.player.x = collidedPlatform.x - this.player.width * 2;
+                    for (let i = 0; i < 10; i++) {
+                        this.sparks[(this.sparkIndex++) % this.sparksMax] =
+                            Spark.createCollision(this.player, collidedPlatform.color, this.acceleration);
+                    }
+
+                    this.player.velocityY = this.player.velocityY / 2;
+                    this.player.velocityX = -20 + -(this.acceleration * 4);
+                } else if (this.isTapped()) {
+                    this.jumped()
+                }
+
+            }
+        })
+
+        this.platformGroup.update(this.canvas, this.acceleration)
+
+        this.sparks.forEach(spark => {
+            spark.update();
+        })
+
+    }
+
+    private drawGame(){
+        this.drawShape(this.player);
+        this.platformGroup.platforms.forEach(platform => {
+            this.drawShape(platform)
+        });
+        this.sparks.forEach(spark => {
+            this.drawShape(spark)
+        })
+    }
+
+    private drawShape(shape: Rect) {
+        this.canvas.context.fillStyle = shape.color;
+        this.canvas.context.fillRect(shape.x, shape.y, shape.width, shape.height);
     }
 
     private jumped() {

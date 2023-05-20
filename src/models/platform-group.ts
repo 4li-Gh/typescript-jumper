@@ -65,10 +65,4 @@ export class PlatformGroup {
     get third(){
         return this.platforms[2]
     }
-
-    intersects(){
-
-    }
-
-
 }

@@ -10,7 +10,7 @@ export class Player extends Rect {
     jumpSize = -PLAYER_SIZE.jumpSize;
     color = PLAYER_COLOR;
 
-    constructor(options) {
+    constructor(options: {x: number, y: number, width: number, height: number}) {
         super(options.x, options.y, options.width, options.height);
         this.setPosition(options.x, options.y);
     }

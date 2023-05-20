@@ -1,10 +1,10 @@
-var gulp = require("gulp");
-var browserify = require("browserify");
-var source = require("vinyl-source-stream");
-var tsify = require("tsify");
-var uglify = require("gulp-uglify");
-var sourcemaps = require("gulp-sourcemaps");
-var buffer = require("vinyl-buffer");
+import gulp from 'gulp';
+import browserify from 'browserify';
+import source from 'vinyl-source-stream';
+import tsify from "tsify";
+import uglify from 'gulp-uglify';
+import sourcemaps from 'gulp-sourcemaps';
+import buffer from 'vinyl-buffer';
 
 gulp.task(
     "default",
@@ -20,7 +20,7 @@ gulp.task(
             .bundle()
             .pipe(source("game.js"))
             .pipe(buffer())
-            .pipe(sourcemaps.init({ loadMaps: true }))
+            // .pipe(sourcemaps.init({ loadMaps: true }))
             .pipe(uglify())
             .pipe(sourcemaps.write("./"))
             .pipe(gulp.dest("dist"));
