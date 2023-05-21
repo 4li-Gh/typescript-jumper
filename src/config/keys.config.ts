@@ -1,3 +1,3 @@
 
 
-export const JUMP_KEYS = [32, 38]; // space and arrow up
+export const JUMP_KEYS = [32, 38, 87]; // space, arrow up and W

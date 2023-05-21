@@ -6,23 +6,25 @@ import {PLAYER_SIZE} from "../config/size.config";
 import {CanvasManager} from "./canvas-manager";
 import {DIFFICULTIES} from "../config/difficulties.config";
 import {fetchRecord, storeRecord} from "../tools/storage";
-import {Rect} from "./rect";
 
 
 export class Game {
-    canvas: CanvasManager = new CanvasManager(document.getElementById('manager'), {width: 640, height: 400})
+    canvas: CanvasManager;
     score: number = 0;
     acceleration: number = 0;
-    accelerationModifier:number = 0;
+    accelerationModifier: number = 0;
     sparks: Spark[] = [];
-    sparkIndex:number = 0;
-    sparksMax = 20;
-    record = fetchRecord();
-    touchActive = false;
+    sparkIndex: number = 0;
+    sparksMax: number = 20;
+    record: number = fetchRecord();
+    touchActive: boolean = false;
     player = new Player({x: PLAYER_SIZE.x, y: PLAYER_SIZE.y, width: PLAYER_SIZE.width, height: PLAYER_SIZE.height});
-    platformGroup = new PlatformGroup(this.canvas.width, this.canvas.height);
+    platformGroup: PlatformGroup;
 
     constructor() {
+        this.canvas = new CanvasManager(document.getElementById('manager'), {width: 640, height: 400});
+        this.platformGroup = new PlatformGroup(this.canvas.width, this.canvas.height);
+
         setRecord(this.record);
 
         this.canvas.onUpdate = () => {
@@ -81,22 +83,10 @@ export class Game {
         this.sparks.forEach(spark => {
             spark.update();
         })
-
     }
 
     private drawGame(){
-        this.drawShape(this.player);
-        this.platformGroup.platforms.forEach(platform => {
-            this.drawShape(platform)
-        });
-        this.sparks.forEach(spark => {
-            this.drawShape(spark)
-        })
-    }
-
-    private drawShape(shape: Rect) {
-        this.canvas.context.fillStyle = shape.color;
-        this.canvas.context.fillRect(shape.x, shape.y, shape.width, shape.height);
+        this.canvas.drawRectangles(this.player, ...this.platformGroup.platforms, ...this.sparks);
     }
 
     private jumped() {

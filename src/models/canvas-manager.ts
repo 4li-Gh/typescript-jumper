@@ -1,4 +1,5 @@
 import {JUMP_KEYS} from "../config/keys.config";
+import {Rect} from "./rect";
 
 
 export class CanvasManager {
@@ -72,6 +73,17 @@ export class CanvasManager {
             window.requestAnimationFrame(counter);
         }
         window.requestAnimationFrame(counter);
+    }
+
+    drawRect(rect: Rect): void {
+        this.context.fillStyle = rect.color;
+        this.context.fillRect(rect.x, rect.y, rect.width, rect.height);
+    }
+
+    drawRectangles(...rectangles: Rect[]): void {
+        rectangles.forEach(rect=>{
+            this.drawRect(rect);
+        })
     }
 
 }
