@@ -1,19 +1,11 @@
 
 
 export function hexToRgba(hex: string, alpha: number = 1): string {
-    const sanitizedHex = hex.replace('#', '');
-    let rgba = '';
+    const sanitizedHex = hex.replace('#', '').length === 3
+        ? hex.replace('#', '').split('').map((char) => char + char).join('')
+        : hex.replace('#', '');
 
-    if (sanitizedHex.length === 3) {
-        rgba = sanitizedHex
-            .split('')
-            .map((char) => `${char}${char}`)
-            .join('');
-    } else {
-        rgba = sanitizedHex;
-    }
-
-    const parsedHex = parseInt(rgba, 16);
+    const parsedHex = parseInt(sanitizedHex, 16);
     const red = (parsedHex >> 16) & 255;
     const green = (parsedHex >> 8) & 255;
     const blue = parsedHex & 255;
